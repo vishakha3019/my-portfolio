@@ -32,9 +32,8 @@ export function Hero({ webgl }: { webgl: boolean }) {
         .to('[data-fallback]', { opacity: 0.08, scale: 0.94, duration: 0.12 }, 0.04)
         // GSAP owns the lines' initial offset; a CSS translate here gets cached as pixels and breaks the exit
         .fromTo('[data-line]', { yPercent: 110 }, { yPercent: 0, duration: 0.1, stagger: 0.025 }, 0.1)
-        .to('[data-line]', { yPercent: -110, duration: 0.08, stagger: 0.015 }, 0.4)
+        .to('[data-line]', { yPercent: -110, opacity: 0, duration: 0.08, stagger: 0.015 }, 0.4)
         .fromTo('[data-outro]', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.1 }, 0.62)
-        .to('[data-outro]', { opacity: 0, duration: 0.08 }, 0.9)
         .to({}, { duration: 0.02 }, 0.98)
     }, root)
     return () => ctx.revert()
@@ -53,7 +52,7 @@ export function Hero({ webgl }: { webgl: boolean }) {
     <section
       id="top"
       ref={setSection}
-      className="relative h-[340vh] select-none max-md:h-[280vh]"
+      className="relative h-[270vh] select-none max-md:h-[230vh]"
       data-scene="Intro"
       aria-labelledby="hero-title"
     >

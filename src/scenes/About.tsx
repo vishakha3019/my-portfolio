@@ -11,8 +11,8 @@ export function About() {
       // portrait opens from a slit as it scrolls in, then drifts slower than the page
       gsap.fromTo(
         '[data-portrait]',
-        { clipPath: 'inset(45% 12% 45% 12%)' },
-        { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none', scrollTrigger: { trigger: '[data-portrait]', start: 'top 95%', end: 'top 35%', scrub: 0.6 } },
+        { clipPath: 'inset(22% 8% 22% 8%)' },
+        { clipPath: 'inset(0% 0% 0% 0%)', ease: 'none', scrollTrigger: { trigger: '[data-portrait]', start: 'top 100%', end: 'top 55%', scrub: 0.6 } },
       )
       gsap.fromTo('[data-portrait] img', { yPercent: -8, scale: 1.15 }, { yPercent: 8, scale: 1, ease: 'none', scrollTrigger: { trigger: '[data-portrait]', start: 'top bottom', end: 'bottom top', scrub: true } })
       // the statement fills in word by word as you read it; it starts silver (still readable, 6:1 contrast), never faded out
@@ -24,7 +24,7 @@ export function About() {
   }, [])
 
   return (
-    <section id="about" ref={root} data-form="1" data-scene="About" className="gutter relative py-[18vh]" aria-labelledby="about-title">
+    <section id="about" ref={root} data-form="1" data-scene="About" className="gutter relative pt-[6vh] pb-[14vh]" aria-labelledby="about-title">
       <div className="mx-auto grid max-w-[1400px] items-center gap-12 md:grid-cols-12">
         {/* plain photo: a gentle zoom on hover, nothing that distorts it */}
         <figure data-portrait className="group relative aspect-[4/5] overflow-hidden rounded-2xl md:col-span-5">
