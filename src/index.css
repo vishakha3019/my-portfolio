@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: #070708;
+  --color-graphite: #111114;
+  --color-rule: #232329;
+  --color-ivory: #ede8de;
+  --color-silver: #8e9097;
+  --color-ion: #8b97ff;
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --font-mono: "Geist Mono", ui-monospace, Menlo, monospace;
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background: var(--color-void);
+  }
+  body {
+    background: var(--color-void);
+    color: var(--color-ivory);
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: var(--color-ion);
+    color: var(--color-void);
+  }
+  :focus-visible {
+    outline: 1.5px solid var(--color-ion);
+    outline-offset: 3px;
+  }
+}
+
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-silver);
+}
+
+@utility gutter {
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* rolling letters: two stacked copies, the group hover rolls them up one by one */
+.roll { display: inline-flex; }
+.roll-c { display: inline-block; overflow: hidden; height: 1.12em; line-height: 1.12; vertical-align: top; }
+.roll-c > span { display: block; transition: transform 0.6s var(--ease-expo); transition-delay: calc(var(--i) * 18ms); }
+.group:hover .roll-c > span,
+.group:focus-visible .roll-c > span { transform: translateY(-100%); }
+
+/* project titles: letters wait below, rise in when active, leave upward when passed */
+.pt-c { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.06em; }
+.pt-c > span { display: inline-block; transform: translateY(110%); transition: transform 0.9s var(--ease-expo); transition-delay: calc(var(--i) * 22ms); }
+[data-state="active"] .pt-c > span { transform: none; transition-delay: calc(220ms + var(--i) * 28ms); }
+[data-state="past"] .pt-c > span { transform: translateY(-110%); }
+
+[data-state] [data-fade] { opacity: 0; transform: translateY(16px); transition: opacity 0.5s, transform 0.8s var(--ease-expo); }
+[data-state="active"] [data-fade] { opacity: 1; transform: none; transition-delay: 0.45s; }
+
+/* project screens wipe up through each other */
+.screen { clip-path: inset(100% 0 0 0); transition: clip-path 1.1s var(--ease-expo); }
+.screen[data-on="true"] { clip-path: inset(0 0 0 0); }
+.screen[data-past="true"] { clip-path: inset(0 0 100% 0); }
+
+/* expanding details without measuring heights */
+.reveal { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.6s var(--ease-expo); }
+.reveal[data-open="true"] { grid-template-rows: 1fr; }
+.reveal > * { overflow: hidden; }
+
+dialog::backdrop { background: rgb(7 7 8 / 0.7); backdrop-filter: blur(6px); }
+dialog[open] { animation: dialog-in 0.9s var(--ease-expo); }
+@keyframes dialog-in { from { clip-path: inset(100% 0 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+/* illustrative mockup motion */
+@keyframes float-y { 50% { transform: translateY(-8px); } }
+@keyframes blink-in { 0%, 8% { opacity: 0; transform: translateY(6px); } 14%, 88% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+@keyframes ping { 0% { transform: scale(0.6); opacity: 0.9; } 100% { transform: scale(2.4); opacity: 0; } }
+@keyframes hop { 0%, 30% { transform: translate(0, 0); } 45%, 75% { transform: translate(calc(100% + 8px), 0); } 90%, 100% { transform: translate(calc(200% + 16px), 0); } }
+@keyframes shrink { from { transform: scaleX(1); } to { transform: scaleX(var(--to)); } }
+@keyframes bump { 0%, 70%, 100% { transform: scale(1); } 80% { transform: scale(1.35); } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(10px); } }
+
+/* custom cursor: hidden until the pointer moves, native cursor hidden only on fine pointers */
+html.has-cursor,
+html.has-cursor * { cursor: none !important; }
+.cursor { opacity: 0; transition: opacity 0.3s; }
+html[data-cursor-shown="true"] .cursor { opacity: 1; }
+.cursor-ring {
+  border: 1px solid rgb(237 232 222 / 0.45);
+  box-shadow: 0 0 22px rgb(139 151 255 / 0.18), inset 0 0 12px rgb(139 151 255 / 0.08);
+  transition: border-color 0.4s, background-color 0.4s, box-shadow 0.4s;
+  will-change: transform, width, height;
+}
+/* over clickable things the ring only changes colour and size: no fill, so the target stays readable */
+.cursor-ring[data-mode="link"] {
+  border-color: rgb(139 151 255 / 0.95);
+  box-shadow: 0 0 18px rgb(139 151 255 / 0.3);
+}
+.cursor-ring[data-mode="label"] {
+  border-color: rgb(237 232 222 / 0.3);
+  background: rgb(7 7 8 / 0.35);
+}
+/* the dot is the real click point: always visible, always on top */
+.cursor-dot {
+  width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 1.5px rgb(7 7 8 / 0.55), 0 0 10px rgb(139 151 255 / 0.8);
+}
+
+/* menu: panel wipes down, rows rise in one after another */
+dialog.menu[open] { animation: menu-in 0.8s var(--ease-expo); }
+@keyframes menu-in { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+dialog.menu[open] .menu-item { animation: fade-up 0.8s var(--ease-expo) both; animation-delay: calc(0.18s + var(--i) * 0.05s); }
+dialog.menu::backdrop { background: transparent; backdrop-filter: none; }
+
+/* certificate cards: pointer tilt, glare and a slowly turning seal */
+.cert {
+  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform 0.7s var(--ease-expo), border-color 0.5s, box-shadow 0.6s;
+}
+.cert:hover {
+  transition: transform 0.15s linear, border-color 0.5s, box-shadow 0.6s;
+  border-color: rgb(139 151 255 / 0.45);
+  box-shadow: 0 30px 80px -30px rgb(139 151 255 / 0.35);
+}
+.cert-glare {
+  background: radial-gradient(420px circle at var(--gx) var(--gy), rgb(255 255 255 / 0.12), transparent 45%);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.cert:hover .cert-glare { opacity: 1; }
+.cert-seal { transition: transform 1.6s var(--ease-expo); }
+.cert:hover .cert-seal { transform: rotate(40deg) scale(1.08); }
+@media (prefers-reduced-motion: reduce) {
+  .cert { transform: none !important; }
+}
+/* the cursor popover: strip the UA popover box so it is a transparent full-screen layer */
+.cursor[popover] { inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; overflow: visible; }
+
+/* phone stand-in for the 3D glass. Gradients only: big blurred shadows and backdrop filters cost seconds of paint on phones */
+.orb-float { translate: -50% -50%; }
+.glass-orb {
+  border-radius: 46% 54% 52% 48% / 50% 46% 54% 50%;
+  background:
+    radial-gradient(circle at 32% 26%, rgb(255 255 255 / 0.9) 0 3%, transparent 13%),
+    radial-gradient(circle at 68% 78%, rgb(139 151 255 / 0.45), transparent 42%),
+    radial-gradient(circle at 50% 50%, rgb(8 8 12 / 0.1) 40%, rgb(139 151 255 / 0.26) 74%, rgb(237 232 222 / 0.42) 97%, transparent 100%);
+  box-shadow: inset 0 0 18px rgb(139 151 255 / 0.35);
+  rotate: -8deg;
+}
+
