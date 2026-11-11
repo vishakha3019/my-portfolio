@@ -87,7 +87,7 @@ export function Hero({ webgl }: { webgl: boolean }) {
               <div data-line className="font-serif font-normal italic tracking-[-0.01em] text-ion">AI-native by habit.</div>
             </div>
             <div className="mt-5 overflow-hidden">
-              <div data-line className="label !text-[12px]">{profile.stack.join(' · ')}</div>
+              <div data-line className="label !text-[12px] leading-[1.6]">{profile.stack.join(' · ')}</div>
             </div>
           </div>
         </div>
