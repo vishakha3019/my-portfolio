@@ -1,6 +1,6 @@
 /**
- * The light stand-in for the 3D glass on phones: a static, gradient-only orb, so phones
- * stay idle once the page has loaded.
+ * Stand-in for the 3D glass in browsers without WebGL2: a static, gradient-only orb
+ * that keeps the page idle once it has loaded.
  */
 export function GlassOrb({ className = '' }: { className?: string }) {
   return (

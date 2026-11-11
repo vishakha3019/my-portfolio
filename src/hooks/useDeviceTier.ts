@@ -4,14 +4,13 @@ export type DeviceTier = 'high' | 'low'
 
 /**
  * Decides once per load whether the 3D world runs and at what quality.
- * Phones get the light CSS version instead: three.js is never downloaded there.
+ * Phones and touch devices run it on the 'low' tier; only browsers without WebGL2 get the CSS fallback.
  */
 export function useDeviceTier() {
   return useMemo(() => {
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
-    const phone = matchMedia('(pointer: coarse) and (max-width: 767px)').matches
     let webgl = false
-    if (!phone) try {
+    try {
       const probe = document.createElement('canvas').getContext('webgl2')
       webgl = !!probe
       // release the probe context: browsers cap how many a page may hold

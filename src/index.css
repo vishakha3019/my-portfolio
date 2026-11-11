@@ -161,7 +161,7 @@ dialog.menu::backdrop { background: transparent; backdrop-filter: none; }
 /* the cursor popover: strip the UA popover box so it is a transparent full-screen layer */
 .cursor[popover] { inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; overflow: visible; }
 
-/* phone stand-in for the 3D glass. Gradients only: big blurred shadows and backdrop filters cost seconds of paint on phones */
+/* stand-in for the 3D glass when WebGL2 is unavailable. Gradients only: big blurred shadows and backdrop filters cost seconds of paint on phones */
 .orb-float { translate: -50% -50%; }
 .glass-orb {
   border-radius: 46% 54% 52% 48% / 50% 46% 54% 50%;
